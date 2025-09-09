@@ -1,0 +1,39 @@
+/* style.css */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #222;
+  margin: 0;
+}
+
+#game {
+  position: relative;
+  width: 1000px;
+  height: 600px;
+  background: #444;
+  border: 3px solid #fff;
+  overflow: hidden;
+}
+.character {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  bottom: 0; /* start on the ground */
+}
+
+#char1 {
+  background: red;
+  left: 100px;
+}
+
+#char2 {
+  background: blue;
+  left: 200px;
+}
+
+/* highlight the active character */
+.active {
+  outline: 3px solid yellow;
+}
