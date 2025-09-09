@@ -1,4 +1,3 @@
-/* style.css */
 body {
   display: flex;
   justify-content: center;
@@ -10,8 +9,13 @@ body {
 
 #game {
   position: relative;
+<<<<<<< HEAD
   width: 800px;
   height: 480px;
+=======
+  width: 1500px;   /* Increased game area width */
+  height: 700px;   /* Increased height */
+>>>>>>> 7797b3187ef0a72544b6a618c9bced824d7010d0
   background: #444;
   border: 3px solid #fff;
   overflow: hidden;
@@ -27,14 +31,22 @@ body {
 
 #char1 {
   background: red;
+<<<<<<< HEAD
   left: 64px; /* 2 tiles from left */
   top: 384px; /* 12 tiles from top (bottom area) */
+=======
+  left: 50px;   /* Spawn far left, safe from hazards */
+>>>>>>> 7797b3187ef0a72544b6a618c9bced824d7010d0
 }
 
 #char2 {
   background: blue;
+<<<<<<< HEAD
   left: 96px; /* 3 tiles from left */
   top: 384px; /* 12 tiles from top (bottom area) */
+=======
+  left: 120px;  /* Spawn far left, safe from hazards */
+>>>>>>> 7797b3187ef0a72544b6a618c9bced824d7010d0
 }
 
 .active {
@@ -44,18 +56,23 @@ body {
 /* Liquid zones */
 .liquid {
   position: absolute;
-  width: 20%;
+  width: 200px;   /* fixed width in pixels */
   height: 40px;
   bottom: 0;
 }
 
+.lava {
+  left: 300px;   /* Safe after spawn */
+  background: orange;
+}
+
 .water {
-  left: 30%;
+  left: 600px;   /* Safe distance from spawn */
   background: lightblue;
 }
 
 .transmute {
-  left: 60%;
+  left: 900px;   /* Safe further right */
   background: green;
 }
 
@@ -68,12 +85,12 @@ body {
 }
 
 .fire-door {
-  right: 10%;
+  right: 100px;
   background: darkred;
 }
 
 .water-door {
-  right: 5%;
+  right: 30px;
   background: darkblue;
 }
 
