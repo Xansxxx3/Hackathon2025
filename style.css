@@ -10,8 +10,8 @@ body {
 
 #game {
   position: relative;
-  width: 80%;
-  height: 70%;
+  width: 800px;
+  height: 480px;
   background: #444;
   border: 3px solid #fff;
   overflow: hidden;
@@ -22,17 +22,19 @@ body {
   position: absolute;
   width: 40px;
   height: 60px;
-  bottom: 0; 
+  z-index: 10;
 }
 
 #char1 {
   background: red;
-  left: 120px;
+  left: 64px; /* 2 tiles from left */
+  top: 384px; /* 12 tiles from top (bottom area) */
 }
 
 #char2 {
   background: blue;
-  left: 200px;
+  left: 96px; /* 3 tiles from left */
+  top: 384px; /* 12 tiles from top (bottom area) */
 }
 
 .active {
@@ -73,4 +75,39 @@ body {
 .water-door {
   right: 5%;
   background: darkblue;
+}
+
+/* Level tiles */
+.tile {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+.tile.stone {
+  background-image: url('assets/images/background/tile1.svg');
+}
+
+.tile.platform {
+  background-image: url('assets/images/background/tile2.svg');
+}
+
+.tile.door {
+  border: 2px solid #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+#level-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
 }

@@ -1,5 +1,142 @@
 console.log("Game loaded!");
 
+// ---------------- LEVEL SYSTEM ----------------
+const TILE_SIZE = 32;
+const LEVEL_WIDTH = 25;
+const LEVEL_HEIGHT = 15;
+
+// Level data structure based on the image description
+const level1 = {
+  width: LEVEL_WIDTH,
+  height: LEVEL_HEIGHT,
+  tileSize: TILE_SIZE,
+  tiles: []
+};
+
+// Initialize level tiles based on image coordinates
+function initializeLevel() {
+  // Clear existing tiles
+  level1.tiles = [];
+  
+  // Create empty grid
+  for (let y = 0; y < LEVEL_HEIGHT; y++) {
+    level1.tiles[y] = [];
+    for (let x = 0; x < LEVEL_WIDTH; x++) {
+      level1.tiles[y][x] = 'empty';
+    }
+  }
+  
+  // Add perimeter walls (stone - tile1.svg)
+  // Top and bottom walls
+  for (let x = 0; x < LEVEL_WIDTH; x++) {
+    level1.tiles[0][x] = 'stone'; // Top wall
+    level1.tiles[LEVEL_HEIGHT - 1][x] = 'stone'; // Bottom wall
+  }
+  
+  // Left and right walls
+  for (let y = 1; y < LEVEL_HEIGHT - 1; y++) {
+    level1.tiles[y][0] = 'stone'; // Left wall
+    level1.tiles[y][LEVEL_WIDTH - 1] = 'stone'; // Right wall
+  }
+  
+  // Internal L-shaped wall structure
+  // Vertical segment: Column 10, Rows 4-13
+  for (let y = 4; y <= 13; y++) {
+    level1.tiles[y][10] = 'stone';
+  }
+  
+  // Horizontal segment: Row 4, Columns 11-13 and 15-23
+  for (let x = 11; x <= 13; x++) {
+    level1.tiles[4][x] = 'stone';
+  }
+  for (let x = 15; x <= 23; x++) {
+    level1.tiles[4][x] = 'stone';
+  }
+  
+  // Platform blocks (tile2.svg)
+  // Bottom-left block: Column 2, Rows 12-13
+  level1.tiles[12][2] = 'platform';
+  level1.tiles[13][2] = 'platform';
+  
+  // Top-middle block: Column 14, Rows 3-4
+  level1.tiles[3][14] = 'platform';
+  level1.tiles[4][14] = 'platform';
+  
+  // Doors (will be handled separately for collision detection)
+  // Top-right door: Column 24, Rows 2-3
+  level1.tiles[2][24] = 'fire-door';
+  level1.tiles[3][24] = 'fire-door';
+  
+  // Bottom-right door: Column 24, Rows 11-12
+  level1.tiles[11][24] = 'water-door';
+  level1.tiles[12][24] = 'water-door';
+}
+
+// Render level tiles to DOM
+function renderLevel() {
+  const gameContainer = document.getElementById('game');
+  
+  // Create level container if it doesn't exist
+  let levelContainer = document.getElementById('level-container');
+  if (!levelContainer) {
+    levelContainer = document.createElement('div');
+    levelContainer.id = 'level-container';
+    levelContainer.style.position = 'absolute';
+    levelContainer.style.top = '0';
+    levelContainer.style.left = '0';
+    levelContainer.style.width = '100%';
+    levelContainer.style.height = '100%';
+    levelContainer.style.pointerEvents = 'none'; // Allow clicks to pass through
+    gameContainer.appendChild(levelContainer);
+  }
+  
+  // Clear existing tiles
+  levelContainer.innerHTML = '';
+  
+  // Render each tile
+  for (let y = 0; y < LEVEL_HEIGHT; y++) {
+    for (let x = 0; x < LEVEL_WIDTH; x++) {
+      const tileType = level1.tiles[y][x];
+      if (tileType !== 'empty') {
+        const tileElement = createTileElement(tileType, x, y);
+        levelContainer.appendChild(tileElement);
+      }
+    }
+  }
+}
+
+// Create individual tile element
+function createTileElement(tileType, x, y) {
+  const tile = document.createElement('div');
+  tile.className = `tile ${tileType}`;
+  tile.style.position = 'absolute';
+  tile.style.left = (x * TILE_SIZE) + 'px';
+  tile.style.top = (y * TILE_SIZE) + 'px';
+  tile.style.width = TILE_SIZE + 'px';
+  tile.style.height = TILE_SIZE + 'px';
+  
+  // Set background image based on tile type
+  if (tileType === 'stone') {
+    tile.style.backgroundImage = 'url(assets/images/background/tile1.svg)';
+    tile.style.backgroundSize = 'cover';
+  } else if (tileType === 'platform') {
+    tile.style.backgroundImage = 'url(assets/images/background/tile2.svg)';
+    tile.style.backgroundSize = 'cover';
+  } else if (tileType === 'fire-door') {
+    tile.className = 'tile door fire-door';
+    tile.style.background = 'darkred';
+  } else if (tileType === 'water-door') {
+    tile.className = 'tile door water-door';
+    tile.style.background = 'darkblue';
+  }
+  
+  return tile;
+}
+
+// Initialize level when game starts
+initializeLevel();
+renderLevel();
+
 // ---------------- AUDIO MANAGER ----------------
 class AudioManager {
   constructor() {
@@ -115,16 +252,16 @@ const char1OriginalHeight = char1.offsetHeight;
 const char2OriginalHeight = char2.offsetHeight;
 
 let player1 = {
-  x: 100,
-  y: gameHeight - char1OriginalHeight,
+  x: 64, // 2 tiles from left
+  y: 384, // 12 tiles from top (bottom area)
   vy: 0,
   onGround: true,
   element: char1,
   type: "fire"
 };
 let player2 = {
-  x: 200,
-  y: gameHeight - char2OriginalHeight,
+  x: 96, // 3 tiles from left
+  y: 384, // 12 tiles from top (bottom area)
   vy: 0,
   onGround: true,
   element: char2,
@@ -324,8 +461,8 @@ function checkDoors() {
 
 function resetGame() {
   // Reset player 1
-  player1.x = 100;
-  player1.y = gameHeight - char1OriginalHeight;
+  player1.x = 64; // 2 tiles from left
+  player1.y = 384; // 12 tiles from top (bottom area)
   player1.vy = 0;
   player1.onGround = true;
   player1.type = "fire";
@@ -336,8 +473,8 @@ function resetGame() {
   char1.style.background = "red";
 
   // Reset player 2
-  player2.x = 200;
-  player2.y = gameHeight - char2OriginalHeight;
+  player2.x = 96; // 3 tiles from left
+  player2.y = 384; // 12 tiles from top (bottom area)
   player2.vy = 0;
   player2.onGround = true;
   player2.type = "water";
