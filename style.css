@@ -19,7 +19,7 @@ body {
 .character {
   position: absolute;
   width: 40px;
-  height: 40px;
+  height: 60px;
   bottom: 0; 
 }
 
