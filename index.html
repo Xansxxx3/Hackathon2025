@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fire & Water Game - Main Menu</title>
+  <link rel="stylesheet" href="menu/menu.css">
+</head>
+<body>
+  <div class="menu-container">
+    <div class="menu-header">
+      <h1>🔥💧 Fire & Water Game 💧🔥</h1>
+      <p class="subtitle">Cooperative Platform Adventure</p>
+    </div>
+
+    <div class="menu-content">
+      <div class="main-menu">
+        <div class="menu-actions">
+          <button id="playBtn" class="menu-btn primary">Play</button>
+          <button id="instructions" class="menu-btn secondary">Instructions</button>
+        </div>
+      </div>
+
+      <div class="level-selection" id="levelSelection" style="display: none;">
+        <h2>Select Level</h2>
+        <div class="level-grid">
+          <div class="level-card" data-level="1">
+            <div class="level-number">1</div>
+            <div class="level-title">Tutorial</div>
+            <div class="level-description">Learn the basics of fire and water mechanics</div>
+            <div class="level-status unlocked">✓ Available</div>
+          </div>
+          
+          <div class="level-card" data-level="2">
+            <div class="level-number">2</div>
+            <div class="level-title">Elemental Challenge</div>
+            <div class="level-description">Master the art of transformation</div>
+            <div class="level-status locked">🔒 Locked</div>
+          </div>
+          
+          <div class="level-card" data-level="3">
+            <div class="level-number">3</div>
+            <div class="level-title">Coming Soon</div>
+            <div class="level-description">More levels in development</div>
+            <div class="level-status locked">🔒 Locked</div>
+          </div>
+        </div>
+        
+        <div class="level-actions">
+          <button id="startGame" class="menu-btn primary" disabled>Start Game</button>
+          <button id="backToMenu" class="menu-btn secondary">Back to Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="instructions-modal" id="instructionsModal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3>How to Play</h3>
+        <div class="instructions-content">
+          <div class="player-instructions">
+            <h4>Player 1 (Fire Element)</h4>
+            <ul>
+              <li><strong>A/D</strong> - Move left/right</li>
+              <li><strong>W</strong> - Jump</li>
+              <li><strong>F</strong> - Float ability</li>
+            </ul>
+          </div>
+          <div class="player-instructions">
+            <h4>Player 2 (Water Element)</h4>
+            <ul>
+              <li><strong>Arrow Keys</strong> - Move left/right</li>
+              <li><strong>Up Arrow</strong> - Jump</li>
+              <li><strong>G</strong> - Duck ability</li>
+            </ul>
+          </div>
+          <div class="game-instructions">
+            <h4>Game Mechanics</h4>
+            <ul>
+              <li>Work together to reach both doors</li>
+              <li>Avoid elements that don't match your type</li>
+              <li>Use transformation zones to change elements</li>
+              <li>Press <strong>R</strong> to reset the level</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="menu/menu.js"></script>
+</body>
+</html>
