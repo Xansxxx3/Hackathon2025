@@ -114,3 +114,13 @@
     padding: 10px;
     border-radius: 4px;
   }
+
+  /* Platform */
+  .platform {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    z-index: 1;
+  }

@@ -95,6 +95,22 @@ window.addEventListener("load", () => {
     { once: true }
   );
 
+  // ---------------- PLATFORM CREATION ----------------
+  function createPlatform() {
+    const platform = document.getElementById("platform");
+    const gameWidth = game.clientWidth;
+    const tileSize = 32;
+    const tilesNeeded = Math.ceil(gameWidth / tileSize);
+    
+    let platformHTML = "";
+    for (let i = 0; i < tilesNeeded; i++) {
+      const tileFile = i % 2 === 0 ? "assets/images/background/tile1.svg" : "assets/images/background/tile2.svg";
+      platformHTML += `<img src="${tileFile}" style="position: absolute; left: ${i * tileSize}px; top: 0; width: ${tileSize}px; height: ${tileSize}px;" />`;
+    }
+    
+    platform.innerHTML = platformHTML;
+  }
+
   // ---------------- GAME SETUP ----------------
   const char1 = document.getElementById("char1"); // Fire
   const char2 = document.getElementById("char2"); // Water
@@ -115,7 +131,7 @@ window.addEventListener("load", () => {
 
   let player1 = {
     x: 100,
-    y: gameHeight - char1OriginalHeight,
+    y: gameHeight - 32 - char1OriginalHeight, // Position on platform surface
     vy: 0,
     onGround: true,
     element: char1,
@@ -123,12 +139,15 @@ window.addEventListener("load", () => {
   };
   let player2 = {
     x: 200,
-    y: gameHeight - char2OriginalHeight,
+    y: gameHeight - 32 - char2OriginalHeight, // Position on platform surface
     vy: 0,
     onGround: true,
     element: char2,
     type: "water"
   };
+
+  // Create the platform
+  createPlatform();
 
   // Ensure both characters are visible
   char1.style.display = "block";
@@ -190,8 +209,10 @@ window.addEventListener("load", () => {
     if (p.x < 0) p.x = 0;
     if (p.x > gameWidth - charWidth) p.x = gameWidth - charWidth;
 
-    if (p.y >= gameHeight - charHeight) {
-      p.y = gameHeight - charHeight;
+    // Platform collision detection
+    const platformTop = gameHeight - 32; // 32px is platform height
+    if (p.y >= platformTop - charHeight) {
+      p.y = platformTop - charHeight;
       p.vy = 0;
       p.onGround = true;
     }
@@ -307,7 +328,7 @@ window.addEventListener("load", () => {
   function resetGame() {
     // Player 1
     player1.x = 100;
-    player1.y = gameHeight - char1OriginalHeight;
+    player1.y = gameHeight - 32 - char1OriginalHeight; // Position on platform surface
     player1.vy = 0;
     player1.onGround = true;
     player1.type = "fire";
@@ -319,7 +340,7 @@ window.addEventListener("load", () => {
 
     // Player 2
     player2.x = 200;
-    player2.y = gameHeight - char2OriginalHeight;
+    player2.y = gameHeight - 32 - char2OriginalHeight; // Position on platform surface
     player2.vy = 0;
     player2.onGround = true;
     player2.type = "water";
