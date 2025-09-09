@@ -1,16 +1,109 @@
 console.log("Game loaded!");
 
+// ---------------- AUDIO MANAGER ----------------
+class AudioManager {
+  constructor() {
+    this.musicEnabled = true;
+    this.soundEnabled = true;
+    this.backgroundMusic = document.getElementById("backgroundMusic");
+    this.setupControls();
+  }
+
+  setupControls() {
+    const musicToggle = document.getElementById("musicToggle");
+    const soundToggle = document.getElementById("soundToggle");
+
+    if (musicToggle) {
+      musicToggle.addEventListener("click", () => this.toggleMusic());
+    }
+
+    if (soundToggle) {
+      soundToggle.addEventListener("click", () => this.toggleSound());
+    }
+  }
+
+  toggleMusic() {
+    this.musicEnabled = !this.musicEnabled;
+    const musicToggle = document.getElementById("musicToggle");
+
+    if (this.musicEnabled) {
+      this.playBackgroundMusic();
+      if (musicToggle) {
+        musicToggle.classList.remove("muted");
+        musicToggle.textContent = "🎵";
+      }
+    } else {
+      if (this.backgroundMusic) this.backgroundMusic.pause();
+      if (musicToggle) {
+        musicToggle.classList.add("muted");
+        musicToggle.textContent = "🎵";
+      }
+    }
+  }
+
+  toggleSound() {
+    this.soundEnabled = !this.soundEnabled;
+    const soundToggle = document.getElementById("soundToggle");
+
+    if (this.soundEnabled) {
+      if (soundToggle) {
+        soundToggle.classList.remove("muted");
+        soundToggle.textContent = "🔊";
+      }
+    } else {
+      if (soundToggle) {
+        soundToggle.classList.add("muted");
+        soundToggle.textContent = "🔊";
+      }
+    }
+  }
+
+  playBackgroundMusic() {
+    if (this.musicEnabled && this.backgroundMusic) {
+      this.backgroundMusic.volume = 0.3;
+      this.backgroundMusic.play().catch(e =>
+        console.warn("Music play failed:", e)
+      );
+    }
+  }
+
+  stopBackgroundMusic() {
+    if (this.backgroundMusic) {
+      this.backgroundMusic.pause();
+      this.backgroundMusic.currentTime = 0;
+    }
+  }
+
+  playSound(id) {
+    if (!this.soundEnabled) return;
+    const sfx = document.getElementById(id);
+    if (sfx) {
+      sfx.currentTime = 0;
+      sfx.play().catch(e => console.warn("Sound play failed:", e));
+    }
+  }
+}
+
+// Create audio manager instance
+const audioManager = new AudioManager();
+
+// Start music after first key press
+document.addEventListener(
+  "keydown",
+  () => {
+    audioManager.playBackgroundMusic();
+  },
+  { once: true }
+);
+
+// ---------------- GAME SETUP ----------------
 const char1 = document.getElementById("char1"); // Fire
 const char2 = document.getElementById("char2"); // Water
 
 const fireDoor = document.querySelector(".fire-door");
 const waterDoor = document.querySelector(".water-door");
 
-let char1InDoor = false;
-let char2InDoor = false;
-
 const keys = {};
-
 const gravity = 0.5;
 const jumpStrength = -10;
 
@@ -21,137 +114,83 @@ const gameHeight = game.clientHeight;
 const char1OriginalHeight = char1.offsetHeight;
 const char2OriginalHeight = char2.offsetHeight;
 
-const audioManager = new AudioManager();
+let player1 = {
+  x: 100,
+  y: gameHeight - char1OriginalHeight,
+  vy: 0,
+  onGround: true,
+  element: char1,
+  type: "fire"
+};
+let player2 = {
+  x: 200,
+  y: gameHeight - char2OriginalHeight,
+  vy: 0,
+  onGround: true,
+  element: char2,
+  type: "water"
+};
 
-// Start music after user presses any key
-document.addEventListener("keydown", () => {
-  audioManager.playBackgroundMusic();
-}, { once: true });
-
-
-let player1 = { x: 100, y: gameHeight - char1OriginalHeight, vy: 0, onGround: true, element: char1, type: "fire" };
-let player2 = { x: 200, y: gameHeight - char2OriginalHeight, vy: 0, onGround: true, element: char2, type: "water" };
-
+// ---------------- CONTROLS ----------------
 document.addEventListener("keydown", e => {
   keys[e.key] = true;
 
-  // Jump controls
+  // Jump
   if ((e.key === "w" || e.key === "W") && player1.onGround) {
     player1.vy = jumpStrength;
     player1.onGround = false;
+    audioManager.playSound("jumpSound");
   }
   if (e.key === "ArrowUp" && player2.onGround) {
     player2.vy = jumpStrength;
     player2.onGround = false;
+    audioManager.playSound("jumpSound");
   }
 
   // Reset with R
   if (e.key === "r" || e.key === "R") {
     resetGame();
+    audioManager.playSound("resetSound");
   }
 });
-
-class AudioManager {
-    constructor() {
-        this.musicEnabled = true;
-        this.soundEnabled = true;
-        this.backgroundMusic = document.getElementById('backgroundMusic');
-        this.setupControls();
-    }
-    
-    setupControls() {
-        const musicToggle = document.getElementById('musicToggle');
-        const soundToggle = document.getElementById('soundToggle');
-        
-        if (musicToggle) {
-            musicToggle.addEventListener('click', () => this.toggleMusic());
-        }
-        
-        if (soundToggle) {
-            soundToggle.addEventListener('click', () => this.toggleSound());
-        }
-    }
-    
-    toggleMusic() {
-        this.musicEnabled = !this.musicEnabled;
-        const musicToggle = document.getElementById('musicToggle');
-        
-        if (this.musicEnabled) {
-            this.playBackgroundMusic();
-            musicToggle.classList.remove('muted');
-            musicToggle.textContent = '🎵';
-        } else {
-            if (this.backgroundMusic) this.backgroundMusic.pause();
-            musicToggle.classList.add('muted');
-            musicToggle.textContent = '🎵';
-        }
-    }
-    
-    toggleSound() {
-        this.soundEnabled = !this.soundEnabled;
-        const soundToggle = document.getElementById('soundToggle');
-        
-        if (this.soundEnabled) {
-            soundToggle.classList.remove('muted');
-            soundToggle.textContent = '🔊';
-        } else {
-            soundToggle.classList.add('muted');
-            soundToggle.textContent = '🔊';
-        }
-    }
-    
-    playBackgroundMusic() {
-        if (this.musicEnabled && this.backgroundMusic) {
-            this.backgroundMusic.volume = 0.3;
-            this.backgroundMusic.play().catch(e => console.warn('Music play failed:', e));
-        }
-    }
-    
-    stopBackgroundMusic() {
-        if (this.backgroundMusic) {
-            this.backgroundMusic.pause();
-            this.backgroundMusic.currentTime = 0;
-        }
-    }
-}
 
 document.addEventListener("keyup", e => {
   keys[e.key] = false;
 
-  // --- Reset ability states on key release ---
-  // Player 1
+  // Reset abilities
   if (e.key === "f") {
     if (player1.type === "water") {
-      char1.style.height = char1OriginalHeight + "px"; // reset puddle
+      char1.style.height = char1OriginalHeight + "px";
     }
     if (player1.type === "fire") {
-      player1.vy = 0; // stop floating
+      player1.vy = 0;
     }
   }
 
-  // Player 2
   if (e.key === "g") {
     if (player2.type === "water") {
-      char2.style.height = char2OriginalHeight + "px"; // reset puddle
+      char2.style.height = char2OriginalHeight + "px";
     }
     if (player2.type === "fire") {
-      player2.vy = 0; // stop floating
+      player2.vy = 0;
     }
   }
 });
 
+// ---------------- GAME FUNCTIONS ----------------
 function updatePlayer(p, leftKey, rightKey, abilityKey) {
   if (keys[leftKey]) p.x -= 3;
   if (keys[rightKey]) p.x += 3;
 
   if (p.type === "fire" && keys[abilityKey]) {
-    p.vy = -2; // Fire floats while holding key
+    p.vy = -2; // float
   } else {
     p.vy += gravity;
   }
 
   if (p.type === "water" && keys[abilityKey]) {
-    p.element.style.height = (p === player1 ? char1OriginalHeight : char2OriginalHeight) / 2 + "px"; // Water puddles
+    p.element.style.height =
+      (p === player1 ? char1OriginalHeight : char2OriginalHeight) / 2 + "px";
   }
 
   p.y += p.vy;
@@ -188,17 +227,6 @@ function isColliding(p, zone) {
   );
 }
 
-function respawnPlayer(p, startX, startY) {
-  setTimeout(() => {
-    p.x = startX;
-    p.y = startY;
-    p.element.style.left = p.x + "px";
-    p.element.style.top = p.y + "px";
-    p.element.style.display = "block";
-  }, 1000);
-}
-
-// Add flags to track if each player is inside the transmute zone
 let inTransmute1 = false;
 let inTransmute2 = false;
 
@@ -207,29 +235,34 @@ function checkLiquidCollisions() {
   const water = document.querySelector(".water");
   const transmute = document.querySelector(".transmute");
 
-  // --- Player 1 ---
+  // Player 1
   if (water && isColliding(player1, water) && player1.type === "fire") {
     char1.style.display = "none";
+    audioManager.playSound("gameOverSound1");
   }
   if (lava && isColliding(player1, lava) && player1.type === "water") {
     char1.style.display = "none";
+    audioManager.playSound("gameOverSound1");
   }
 
-  // --- Player 2 ---
+  // Player 2
   if (water && isColliding(player2, water) && player2.type === "fire") {
     char2.style.display = "none";
+    audioManager.playSound("gameOverSound2");
   }
   if (lava && isColliding(player2, lava) && player2.type === "water") {
     char2.style.display = "none";
+    audioManager.playSound("gameOverSound2");
   }
 
-  // --- Transmutation logic ---
+  // Transmute
   if (transmute && isColliding(player1, transmute)) {
     if (!inTransmute1) {
-      player1.type = (player1.type === "fire") ? "water" : "fire";
+      player1.type = player1.type === "fire" ? "water" : "fire";
       char1.style.height = char1OriginalHeight + "px";
-      char1.style.background = (player1.type === "fire") ? "red" : "blue";
+      char1.style.background = player1.type === "fire" ? "red" : "blue";
       inTransmute1 = true;
+      audioManager.playSound("wooshSound");
     }
   } else {
     inTransmute1 = false;
@@ -237,10 +270,11 @@ function checkLiquidCollisions() {
 
   if (transmute && isColliding(player2, transmute)) {
     if (!inTransmute2) {
-      player2.type = (player2.type === "water") ? "fire" : "water";
+      player2.type = player2.type === "water" ? "fire" : "water";
       char2.style.height = char2OriginalHeight + "px";
-      char2.style.background = (player2.type === "fire") ? "red" : "blue";
+      char2.style.background = player2.type === "fire" ? "red" : "blue";
       inTransmute2 = true;
+      audioManager.playSound("wooshSound");
     }
   } else {
     inTransmute2 = false;
@@ -259,13 +293,9 @@ function isTouchingDoor(character, door) {
   );
 }
 
-// Track door state
-let char1AtDoor = false;
-let char2AtDoor = false;
 let winTimeout = null;
 
 function checkDoors() {
-  // Only check if doors exist
   if (!fireDoor || !waterDoor) return;
 
   const char1AtFire = isTouchingDoor(char1, fireDoor);
@@ -274,14 +304,13 @@ function checkDoors() {
   const char2AtWater = isTouchingDoor(char2, waterDoor);
 
   const bothAtDoors =
-    (char1AtFire && char2AtWater) ||
-    (char1AtWater && char2AtFire);
+    (char1AtFire && char2AtWater) || (char1AtWater && char2AtFire);
 
   if (bothAtDoors) {
     if (!winTimeout) {
-      console.log("Both characters are at different doors... opening in 1s");
       winTimeout = setTimeout(() => {
         alert("🎉 You Win! Both characters reached the doors!");
+        audioManager.playSound("bonusSound");
         winTimeout = null;
       }, 1000);
     }
@@ -293,9 +322,8 @@ function checkDoors() {
   }
 }
 
-// Reset both players
 function resetGame() {
-  // Player 1 reset
+  // Reset player 1
   player1.x = 100;
   player1.y = gameHeight - char1OriginalHeight;
   player1.vy = 0;
@@ -307,7 +335,7 @@ function resetGame() {
   char1.style.height = char1OriginalHeight + "px";
   char1.style.background = "red";
 
-  // Player 2 reset
+  // Reset player 2
   player2.x = 200;
   player2.y = gameHeight - char2OriginalHeight;
   player2.vy = 0;
@@ -325,12 +353,9 @@ function gameLoop() {
   updatePlayer(player2, "ArrowLeft", "ArrowRight", "g");
 
   checkLiquidCollisions();
-
-    checkDoors(); 
+  checkDoors();
 
   requestAnimationFrame(gameLoop);
 }
-
-
 
 gameLoop();
