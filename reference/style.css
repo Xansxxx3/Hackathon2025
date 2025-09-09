@@ -1,0 +1,340 @@
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    user-select: none;
+}
+
+/* Game container */
+.game-container {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    background: linear-gradient(to bottom, #87CEEB 0%, #4682B4 100%);
+    border: 3px solid #333;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+}
+
+/* Canvas */
+canvas {
+    display: block;
+    background: transparent;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* UI Elements */
+.ui {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.level-info {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.gem-counter {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.audio-controls {
+    position: absolute;
+    top: 0;
+    right: -180px;
+    display: flex;
+    gap: 10px;
+}
+
+.audio-btn {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.audio-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+}
+
+.audio-btn.muted {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+/* Controls */
+.controls {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 100;
+    max-width: 350px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.control-section {
+    margin-bottom: 8px;
+}
+
+.character-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.fireboy-color {
+    color: #ff6b6b;
+    text-shadow: 1px 1px 2px rgba(255, 0, 0, 0.5);
+}
+
+.watergirl-color {
+    color: #4ecdc4;
+    text-shadow: 1px 1px 2px rgba(0, 255, 255, 0.5);
+}
+
+.objective {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #ffdd59;
+    text-shadow: 1px 1px 2px rgba(255, 215, 0, 0.5);
+}
+
+/* Victory Screen */
+.victory {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    padding: 0;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    display: none;
+    animation: victoryPulse 2s ease-in-out infinite alternate;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.victory-content {
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 17px;
+    backdrop-filter: blur(10px);
+}
+
+.victory-title {
+    font-size: 28px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.victory-text {
+    font-size: 18px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.victory-stats {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.victory-stats div {
+    margin: 5px 0;
+}
+
+.victory-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    margin: 5px;
+    background: linear-gradient(45deg, #4CAF50, #45a049);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.victory-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.victory-btn:active {
+    transform: translateY(0);
+}
+
+#nextLevelBtn {
+    background: linear-gradient(45deg, #ff9500, #ff7700);
+}
+
+/* Loading Screen */
+.loading-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    color: white;
+}
+
+.loading-content {
+    text-align: center;
+    padding: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.loading-content h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.loading-bar {
+    width: 300px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 20px 0;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.loading-progress {
+    height: 100%;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 8px;
+}
+
+#loadingText {
+    font-size: 16px;
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+/* Animations */
+@keyframes victoryPulse {
+    from {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 80px rgba(0, 0, 0, 0.8);
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1.05);
+        box-shadow: 0 0 100px rgba(255, 255, 255, 0.3);
+    }
+}
+
+@keyframes gemShine {
+    0% {
+        filter: brightness(1);
+    }
+    50% {
+        filter: brightness(1.5);
+    }
+    100% {
+        filter: brightness(1);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 850px) {
+    .game-container {
+        width: 95vw;
+        height: 70vh;
+    }
+    
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
+    
+    .controls {
+        font-size: 11px;
+        padding: 10px;
+        max-width: 300px;
+    }
+    
+    .ui {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .controls {
+        bottom: 5px;
+        left: 5px;
+        font-size: 10px;
+        padding: 8px;
+        max-width: 250px;
+    }
+    
+    .ui {
+        top: 5px;
+        left: 5px;
+        font-size: 14px;
+    }
+    
+    .audio-controls {
+        right: -150px;
+    }
+}
