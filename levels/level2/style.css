@@ -40,46 +40,6 @@
     outline: 3px solid yellow;
   }
 
-  /* Liquid zones */
-  .liquid {
-    position: absolute;
-    width: 20%;
-    height: 40px;
-    bottom: 0;
-  }
-
-  .lava {
-    left: 10%;
-    background: orange;
-  }
-
-  .water {
-    left: 30%;
-    background: lightblue;
-  }
-
-  .transmute {
-    left: 60%;
-    background: green;
-  }
-
-  /* Doors */
-  .door {
-    position: absolute;
-    width: 60px;
-    height: 80px;
-    bottom: 0;
-  }
-
-  .fire-door {
-    right: 10%;
-    background: darkred;
-  }
-
-  .water-door {
-    right: 5%;
-    background: darkblue;
-  }
 
   /* Audio Controls */
   .audio-controls {

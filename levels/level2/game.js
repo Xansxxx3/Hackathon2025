@@ -115,8 +115,6 @@ window.addEventListener("load", () => {
   const char1 = document.getElementById("char1"); // Fire
   const char2 = document.getElementById("char2"); // Water
 
-  const fireDoor = document.querySelector(".fire-door");
-  const waterDoor = document.querySelector(".water-door");
 
   const keys = {};
   const gravity = 0.5;
@@ -242,106 +240,8 @@ window.addEventListener("load", () => {
     );
   }
 
-  let inTransmute1 = false;
-  let inTransmute2 = false;
 
-  function checkLiquidCollisions() {
-    const lava = document.querySelector(".lava");
-    const water = document.querySelector(".water");
-    const transmute = document.querySelector(".transmute");
 
-    // Only kill if type mismatch
-    if (water && isColliding(player1, water) && player1.type === "fire") {
-      char1.style.display = "none";
-      audioManager.playSound("gameOverSound1");
-    }
-    if (lava && isColliding(player1, lava) && player1.type === "water") {
-      char1.style.display = "none";
-      audioManager.playSound("gameOverSound1");
-    }
-
-    if (water && isColliding(player2, water) && player2.type === "fire") {
-      char2.style.display = "none";
-      audioManager.playSound("gameOverSound2");
-    }
-    if (lava && isColliding(player2, lava) && player2.type === "water") {
-      char2.style.display = "none";
-      audioManager.playSound("gameOverSound2");
-    }
-
-    // Transmute
-    if (transmute && isColliding(player1, transmute)) {
-      if (!inTransmute1) {
-        player1.type = player1.type === "fire" ? "water" : "fire";
-        char1.style.height = char1OriginalHeight + "px";
-        char1.style.background = player1.type === "fire" ? "red" : "blue";
-        inTransmute1 = true;
-        audioManager.playSound("wooshSound");
-      }
-    } else inTransmute1 = false;
-
-    if (transmute && isColliding(player2, transmute)) {
-      if (!inTransmute2) {
-        player2.type = player2.type === "water" ? "fire" : "water";
-        char2.style.height = char2OriginalHeight + "px";
-        char2.style.background = player2.type === "fire" ? "red" : "blue";
-        inTransmute2 = true;
-        audioManager.playSound("wooshSound");
-      }
-    } else inTransmute2 = false;
-  }
-
-  function isTouchingDoor(character, door) {
-    const cRect = character.getBoundingClientRect();
-    const dRect = door.getBoundingClientRect();
-
-    return !(
-      cRect.top > dRect.bottom ||
-      cRect.bottom < dRect.top ||
-      cRect.right < dRect.left ||
-      cRect.left > dRect.right
-    );
-  }
-
-  let winTimeout = null;
-
-  function checkDoors() {
-    if (!fireDoor || !waterDoor) return;
-
-    const char1AtFire = isTouchingDoor(char1, fireDoor);
-    const char1AtWater = isTouchingDoor(char1, waterDoor);
-    const char2AtFire = isTouchingDoor(char2, fireDoor);
-    const char2AtWater = isTouchingDoor(char2, waterDoor);
-
-    const bothAtDoors =
-      (char1AtFire && char2AtWater) || (char1AtWater && char2AtFire);
-
-    if (bothAtDoors) {
-      if (!winTimeout) {
-        winTimeout = setTimeout(() => {
-          alert("🎉 You Win! Both characters reached the doors!");
-          audioManager.playSound("bonusSound");
-          
-          // Mark level as completed
-          const completedLevels = JSON.parse(localStorage.getItem('completedLevels') || '[]');
-          if (!completedLevels.includes(2)) {
-            completedLevels.push(2);
-            localStorage.setItem('completedLevels', JSON.stringify(completedLevels));
-          }
-          
-          // Return to menu after a delay
-          setTimeout(() => {
-            window.location.href = "../../menu/index.html";
-          }, 2000);
-          
-          winTimeout = null;
-        }, 1000);
-      }
-    } else if (winTimeout) {
-      clearTimeout(winTimeout);
-      winTimeout = null;
-    }
-  }
 
   function resetGame() {
     // Player 1
@@ -373,8 +273,6 @@ window.addEventListener("load", () => {
     updatePlayer(player1, "a", "d", "f");
     updatePlayer(player2, "ArrowLeft", "ArrowRight", "g");
 
-    checkLiquidCollisions();
-    checkDoors();
 
     requestAnimationFrame(gameLoop);
   }
