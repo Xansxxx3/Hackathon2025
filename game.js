@@ -61,7 +61,7 @@ window.addEventListener("load", () => {
 
     playBackgroundMusic() {
       if (this.musicEnabled && this.backgroundMusic) {
-        this.backgroundMusic.volume = 0.3;
+        this.backgroundMusic.volume = 0.8;
         this.backgroundMusic.play().catch(e =>
           console.warn("Music play failed:", e)
         );
