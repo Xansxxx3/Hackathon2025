@@ -60,7 +60,7 @@ class AudioManager {
 
   playBackgroundMusic() {
     if (this.musicEnabled && this.backgroundMusic) {
-      this.backgroundMusic.volume = 0.3;
+      this.backgroundMusic.volume = 0.6;
       this.backgroundMusic.play().catch(e =>
         console.warn("Music play failed:", e)
       );
@@ -83,6 +83,21 @@ class AudioManager {
     }
   }
 }
+
+const jumpSound = document.getElementById("jumpSound");
+
+// Example: press W or ArrowUp to jump
+document.addEventListener("keydown", (e) => {
+  if (e.code === "KeyW" || e.code === "ArrowUp") {
+    // play jump sound
+    jumpSound.currentTime = 0; // rewind if spammed
+    jumpSound.play();
+
+    // TODO: your jump logic here (e.g., move character up)
+    console.log("Jump!");
+  }
+});
+
 
 // Create audio manager instance
 const audioManager = new AudioManager();
