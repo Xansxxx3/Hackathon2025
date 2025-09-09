@@ -37,6 +37,16 @@ class GameMenu {
         this.closeModal(e.target);
       }
     });
+
+    // ESC key to close modal
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const openModal = document.querySelector('.modal.show');
+        if (openModal) {
+          this.closeModal(openModal);
+        }
+      }
+    });
   }
 
   showLevelSelection() {
@@ -99,11 +109,22 @@ class GameMenu {
     const modal = document.getElementById(modalId);
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+    
+    // Add show class for animation
+    setTimeout(() => {
+      modal.classList.add('show');
+    }, 10);
   }
 
   closeModal(modal) {
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    // Remove show class for animation
+    modal.classList.remove('show');
+    
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }, 300);
   }
 
 

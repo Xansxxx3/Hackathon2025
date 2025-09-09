@@ -117,6 +117,7 @@ window.addEventListener("load", () => {
 
   const fireDoor = document.querySelector(".fire-door");
   const waterDoor = document.querySelector(".water-door");
+  const middlePlatform = document.querySelector(".middle-platform");
 
   const keys = {};
   const gravity = 0.5;
@@ -222,6 +223,61 @@ window.addEventListener("load", () => {
       p.onGround = true;
     }
 
+    // Middle platform collision detection
+    if (middlePlatform) {
+      const middlePlatformRect = middlePlatform.getBoundingClientRect();
+      const gameRect = game.getBoundingClientRect();
+      
+      // Convert to game coordinates
+      const platformLeft = middlePlatformRect.left - gameRect.left;
+      const platformRight = middlePlatformRect.right - gameRect.left;
+      const platformTop = middlePlatformRect.top - gameRect.top;
+      const platformBottom = middlePlatformRect.bottom - gameRect.top;
+      
+      // Check if character is within platform bounds
+      const charRight = p.x + charWidth;
+      const charBottom = p.y + charHeight;
+      
+      // Check for collision with platform
+      const isColliding = charRight > platformLeft && p.x < platformRight && 
+                         charBottom > platformTop && p.y < platformBottom;
+      
+      if (isColliding) {
+        // Check if character can pass through based on abilities
+        let canPassThrough = false;
+        
+        // For fire character: only allow passage when actively flying ABOVE the platform
+        if (p.type === "fire") {
+          const isFlying = keys["f"] || keys["F"];
+          const isAbovePlatform = p.y + charHeight < platformTop; // Character's bottom is above platform's top
+          canPassThrough = isFlying && isAbovePlatform;
+        }
+        // For water character: only allow passage when actively shrunk AND at bottom of platform
+        else if (p.type === "water") {
+          const isShrunk = keys["g"] || keys["G"];
+          const isAtBottom = p.y + charHeight >= platformBottom - 10; // Near the bottom of platform (with small tolerance)
+          canPassThrough = isShrunk && isAtBottom;
+        }
+        
+        // If cannot pass through, block horizontal movement
+        if (!canPassThrough) {
+          // Block horizontal movement through the platform
+          // Check if character is trying to move horizontally through the platform
+          const charCenterX = p.x + charWidth / 2;
+          const platformCenterX = (platformLeft + platformRight) / 2;
+          
+          // If character is on the left side of platform, keep them on the left
+          if (charCenterX < platformCenterX) {
+            p.x = platformLeft - charWidth;
+          }
+          // If character is on the right side of platform, keep them on the right
+          else {
+            p.x = platformRight;
+          }
+        }
+      }
+    }
+
     if (p.y < 0) {
       p.y = 0;
       p.vy = 0;
@@ -242,54 +298,7 @@ window.addEventListener("load", () => {
     );
   }
 
-  let inTransmute1 = false;
-  let inTransmute2 = false;
-
-  function checkLiquidCollisions() {
-    const lava = document.querySelector(".lava");
-    const water = document.querySelector(".water");
-    const transmute = document.querySelector(".transmute");
-
-    // Only kill if type mismatch
-    if (water && isColliding(player1, water) && player1.type === "fire") {
-      char1.style.display = "none";
-      audioManager.playSound("gameOverSound1");
-    }
-    if (lava && isColliding(player1, lava) && player1.type === "water") {
-      char1.style.display = "none";
-      audioManager.playSound("gameOverSound1");
-    }
-
-    if (water && isColliding(player2, water) && player2.type === "fire") {
-      char2.style.display = "none";
-      audioManager.playSound("gameOverSound2");
-    }
-    if (lava && isColliding(player2, lava) && player2.type === "water") {
-      char2.style.display = "none";
-      audioManager.playSound("gameOverSound2");
-    }
-
-    // Transmute
-    if (transmute && isColliding(player1, transmute)) {
-      if (!inTransmute1) {
-        player1.type = player1.type === "fire" ? "water" : "fire";
-        char1.style.height = char1OriginalHeight + "px";
-        char1.style.background = player1.type === "fire" ? "red" : "blue";
-        inTransmute1 = true;
-        audioManager.playSound("wooshSound");
-      }
-    } else inTransmute1 = false;
-
-    if (transmute && isColliding(player2, transmute)) {
-      if (!inTransmute2) {
-        player2.type = player2.type === "water" ? "fire" : "water";
-        char2.style.height = char2OriginalHeight + "px";
-        char2.style.background = player2.type === "fire" ? "red" : "blue";
-        inTransmute2 = true;
-        audioManager.playSound("wooshSound");
-      }
-    } else inTransmute2 = false;
-  }
+  // Removed hazard collision detection - no hazards in basic platform level
 
   function isTouchingDoor(character, door) {
     const cRect = character.getBoundingClientRect();
@@ -367,13 +376,14 @@ window.addEventListener("load", () => {
     char2.style.top = player2.y + "px";
     char2.style.height = char2OriginalHeight + "px";
     char2.style.background = "blue";
+
   }
 
   function gameLoop() {
     updatePlayer(player1, "a", "d", "f");
     updatePlayer(player2, "ArrowLeft", "ArrowRight", "g");
 
-    checkLiquidCollisions();
+    // checkLiquidCollisions(); // Removed - no hazards in basic platform
     checkDoors();
 
     requestAnimationFrame(gameLoop);

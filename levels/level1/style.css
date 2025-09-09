@@ -23,6 +23,7 @@
     position: absolute;
     width: 40px;
     height: 60px;
+    z-index: 2;
     /* Removed bottom: 0; - let JS handle positioning */
   }
 
@@ -48,37 +49,50 @@
     bottom: 0;
   }
 
-  .lava {
+  /* .lava {
     left: 10%;
     background: orange;
-  }
+  } */
 
-  .water {
+  /* .water {
     left: 30%;
     background: lightblue;
-  }
+  } */
 
-  .transmute {
+  /* .transmute {
     left: 60%;
     background: green;
-  }
+  } */
 
   /* Doors */
   .door {
     position: absolute;
-    width: 60px;
-    height: 80px;
-    bottom: 0;
+    width: 45px;
+    height: 100px;
+    bottom: 10px;
+    object-fit: contain;
+    z-index: 0;
   }
 
   .fire-door {
     right: 10%;
-    background: darkred;
   }
 
   .water-door {
     right: 5%;
-    background: darkblue;
+  }
+
+  /* Middle Platform */
+  .middle-platform {
+    position: absolute;
+    width: 400px;
+    height: 20px;
+    left: 50%;
+    top: 60%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    background: #666;
+    border: 2px solid #888;
+    z-index: 1;
   }
 
   /* Audio Controls */
