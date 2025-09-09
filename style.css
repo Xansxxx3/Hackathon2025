@@ -10,12 +10,13 @@ body {
 
 #game {
   position: relative;
-  width: 1000px;
-  height: 600px;
+  width: 80%;
+  height: 70%;
   background: #444;
   border: 3px solid #fff;
   overflow: hidden;
 }
+
 .character {
   position: absolute;
   width: 40px;
@@ -36,4 +37,27 @@ body {
 /* highlight the active character */
 .active {
   outline: 3px solid yellow;
+}
+
+/* Liquid zones */
+.liquid {
+  position: absolute;
+  width: 20%;
+  height: 40px;
+  bottom: 0;
+}
+
+.lava {
+  left: 20%;
+  background: orange;
+}
+
+.water {
+  left: 50%;
+  background: lightblue;
+}
+
+.transmute {
+  left: 75%;
+  background: green;
 }

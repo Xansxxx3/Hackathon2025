@@ -12,17 +12,16 @@ const game = document.getElementById("game");
 const gameWidth = game.clientWidth;
 const gameHeight = game.clientHeight;
 
-// store original sizes for reset
 const char1OriginalHeight = char1.offsetHeight;
 const char2OriginalHeight = char2.offsetHeight;
 
-let player1 = { x: 100, y: gameHeight - char1OriginalHeight, vy: 0, onGround: true, element: char1 };
-let player2 = { x: 200, y: gameHeight - char2OriginalHeight, vy: 0, onGround: true, element: char2 };
+let player1 = { x: 100, y: gameHeight - char1OriginalHeight, vy: 0, onGround: true, element: char1, type: "fire" };
+let player2 = { x: 200, y: gameHeight - char2OriginalHeight, vy: 0, onGround: true, element: char2, type: "water" };
 
 document.addEventListener("keydown", e => {
   keys[e.key] = true;
 
-  // jump logic
+  // Jump controls
   if ((e.key === "w" || e.key === "W") && player1.onGround) {
     player1.vy = jumpStrength;
     player1.onGround = false;
@@ -31,67 +30,178 @@ document.addEventListener("keydown", e => {
     player2.vy = jumpStrength;
     player2.onGround = false;
   }
+
+  // Reset with R
+  if (e.key === "r" || e.key === "R") {
+    resetGame();
+  }
 });
 
 document.addEventListener("keyup", e => {
   keys[e.key] = false;
 
-  // reset watergirl size when ability released
+  // --- Reset ability states on key release ---
+  // Player 1
+  if (e.key === "f") {
+    if (player1.type === "water") {
+      char1.style.height = char1OriginalHeight + "px"; // reset puddle
+    }
+    if (player1.type === "fire") {
+      player1.vy = 0; // stop floating
+    }
+  }
+
+  // Player 2
   if (e.key === "g") {
-    player2.element.style.height = char2OriginalHeight + "px";
+    if (player2.type === "water") {
+      char2.style.height = char2OriginalHeight + "px"; // reset puddle
+    }
+    if (player2.type === "fire") {
+      player2.vy = 0; // stop floating
+    }
   }
 });
 
-function updatePlayer(p, leftKey, rightKey, abilityKey, type) {
-  // horizontal movement
+function updatePlayer(p, leftKey, rightKey, abilityKey) {
   if (keys[leftKey]) p.x -= 3;
   if (keys[rightKey]) p.x += 3;
 
-  // FIREBOY: rise if ability key pressed
-  if (type === "fire" && keys[abilityKey]) {
-    p.vy = -2; // float upward slowly
+  if (p.type === "fire" && keys[abilityKey]) {
+    p.vy = -2; // Fire floats while holding key
   } else {
-    // apply gravity otherwise
     p.vy += gravity;
   }
 
-  // WATERGIRL: puddle form if ability key pressed
-  if (type === "water" && keys[abilityKey]) {
-    p.element.style.height = (char2OriginalHeight / 2) + "px"; // shrink height
+  if (p.type === "water" && keys[abilityKey]) {
+    p.element.style.height = (p === player1 ? char1OriginalHeight : char2OriginalHeight) / 2 + "px"; // Water puddles
   }
 
-  // apply velocity
   p.y += p.vy;
 
-  // get character dimensions
   const charWidth = p.element.offsetWidth;
   const charHeight = p.element.offsetHeight;
 
-  // clamp inside horizontal bounds
   if (p.x < 0) p.x = 0;
   if (p.x > gameWidth - charWidth) p.x = gameWidth - charWidth;
 
-  // ground collision
   if (p.y >= gameHeight - charHeight) {
     p.y = gameHeight - charHeight;
     p.vy = 0;
     p.onGround = true;
   }
 
-  // ceiling clamp
   if (p.y < 0) {
     p.y = 0;
     p.vy = 0;
   }
 
-  // update position
   p.element.style.left = p.x + "px";
   p.element.style.top = p.y + "px";
 }
 
+function isColliding(p, zone) {
+  const rect1 = p.element.getBoundingClientRect();
+  const rect2 = zone.getBoundingClientRect();
+  return !(
+    rect1.top > rect2.bottom ||
+    rect1.bottom < rect2.top ||
+    rect1.left > rect2.right ||
+    rect1.right < rect2.left
+  );
+}
+
+function respawnPlayer(p, startX, startY) {
+  setTimeout(() => {
+    p.x = startX;
+    p.y = startY;
+    p.element.style.left = p.x + "px";
+    p.element.style.top = p.y + "px";
+    p.element.style.display = "block";
+  }, 1000);
+}
+
+// Add flags to track if each player is inside the transmute zone
+let inTransmute1 = false;
+let inTransmute2 = false;
+
+function checkLiquidCollisions() {
+  const lava = document.querySelector(".lava");
+  const water = document.querySelector(".water");
+  const transmute = document.querySelector(".transmute");
+
+  // --- Player 1 ---
+  if (water && isColliding(player1, water) && player1.type === "fire") {
+    char1.style.display = "none";
+  }
+  if (lava && isColliding(player1, lava) && player1.type === "water") {
+    char1.style.display = "none";
+  }
+
+  // --- Player 2 ---
+  if (water && isColliding(player2, water) && player2.type === "fire") {
+    char2.style.display = "none";
+  }
+  if (lava && isColliding(player2, lava) && player2.type === "water") {
+    char2.style.display = "none";
+  }
+
+  // --- Transmutation logic ---
+  if (transmute && isColliding(player1, transmute)) {
+    if (!inTransmute1) {
+      player1.type = (player1.type === "fire") ? "water" : "fire";
+      char1.style.height = char1OriginalHeight + "px";
+      char1.style.background = (player1.type === "fire") ? "red" : "blue";
+      inTransmute1 = true;
+    }
+  } else {
+    inTransmute1 = false;
+  }
+
+  if (transmute && isColliding(player2, transmute)) {
+    if (!inTransmute2) {
+      player2.type = (player2.type === "water") ? "fire" : "water";
+      char2.style.height = char2OriginalHeight + "px";
+      char2.style.background = (player2.type === "fire") ? "red" : "blue";
+      inTransmute2 = true;
+    }
+  } else {
+    inTransmute2 = false;
+  }
+}
+
+
+// Reset both players
+function resetGame() {
+  // Player 1 reset
+  player1.x = 100;
+  player1.y = gameHeight - char1OriginalHeight;
+  player1.vy = 0;
+  player1.onGround = true;
+  player1.type = "fire";
+  char1.style.display = "block";
+  char1.style.left = player1.x + "px";
+  char1.style.top = player1.y + "px";
+  char1.style.height = char1OriginalHeight + "px";
+  char1.style.background = "red";
+
+  // Player 2 reset
+  player2.x = 200;
+  player2.y = gameHeight - char2OriginalHeight;
+  player2.vy = 0;
+  player2.onGround = true;
+  player2.type = "water";
+  char2.style.display = "block";
+  char2.style.left = player2.x + "px";
+  char2.style.top = player2.y + "px";
+  char2.style.height = char2OriginalHeight + "px";
+  char2.style.background = "blue";
+}
+
 function gameLoop() {
-  updatePlayer(player1, "a", "d", "f", "fire");              // Fireboy uses "f" to float
-  updatePlayer(player2, "ArrowLeft", "ArrowRight", "g", "water"); // Watergirl uses "/" to puddle
+  updatePlayer(player1, "a", "d", "f");
+  updatePlayer(player2, "ArrowLeft", "ArrowRight", "g");
+
+  checkLiquidCollisions();
 
   requestAnimationFrame(gameLoop);
 }
