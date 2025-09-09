@@ -39,6 +39,24 @@
   .active {
     outline: 3px solid yellow;
   }
+  #gameOverMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px 40px;
+  border: 2px solid white;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 10;
+}
+
+.hidden {
+  display: none;
+}
 
   /* Liquid zones */
   .liquid {

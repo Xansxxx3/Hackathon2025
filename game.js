@@ -235,26 +235,30 @@ window.addEventListener("load", () => {
     // Game over conditions - any character touching wrong liquid
     if (water && isColliding(player1, water) && player1.type === "fire") {
       gameRunning = false;
-      alert("💀 Game Over! Press R to restart.");
-      audioManager.playSound("gameOverSound2");
+        alert("💀 Game Over! Press R to restart."); // keep the old alert
+        document.getElementById("gameOverMessage").classList.remove("hidden");
+        audioManager.playSound("gameOverSound2");
       return;
     }
     if (lava && isColliding(player1, lava) && player1.type === "water") {
       gameRunning = false;
-      alert("💀 Game Over! Press R to restart.");
-      audioManager.playSound("gameOverSound2");
+        alert("💀 Game Over! Press R to restart."); // keep the old alert
+        document.getElementById("gameOverMessage").classList.remove("hidden");
+        audioManager.playSound("gameOverSound2");
       return;
     }
     if (water && isColliding(player2, water) && player2.type === "fire") {
       gameRunning = false;
-      alert("💀 Game Over! Press R to restart.");
-      audioManager.playSound("gameOverSound2");
+        alert("💀 Game Over! Press R to restart."); // keep the old alert
+        document.getElementById("gameOverMessage").classList.remove("hidden");
+        audioManager.playSound("gameOverSound2");
       return;
     }
     if (lava && isColliding(player2, lava) && player2.type === "water") {
       gameRunning = false;
-      alert("💀 Game Over! Press R to restart.");
-      audioManager.playSound("gameOverSound2");
+        alert("💀 Game Over! Press R to restart."); // keep the old alert
+        document.getElementById("gameOverMessage").classList.remove("hidden");
+        audioManager.playSound("gameOverSound2");
       return;
     }
 
@@ -334,6 +338,7 @@ window.addEventListener("load", () => {
   }
 
   function resetGame() {
+    document.getElementById("gameOverMessage").classList.add("hidden");
     gameRunning = true;
     char1AtDoorPrevious = false;
     char2AtDoorPrevious = false;
