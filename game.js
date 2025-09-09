@@ -15,6 +15,14 @@ const gameHeight = game.clientHeight;
 const char1OriginalHeight = char1.offsetHeight;
 const char2OriginalHeight = char2.offsetHeight;
 
+const audioManager = new AudioManager();
+
+// Start music after user presses any key
+document.addEventListener("keydown", () => {
+  audioManager.playBackgroundMusic();
+}, { once: true });
+
+
 let player1 = { x: 100, y: gameHeight - char1OriginalHeight, vy: 0, onGround: true, element: char1, type: "fire" };
 let player2 = { x: 200, y: gameHeight - char2OriginalHeight, vy: 0, onGround: true, element: char2, type: "water" };
 
@@ -36,6 +44,70 @@ document.addEventListener("keydown", e => {
     resetGame();
   }
 });
+
+class AudioManager {
+    constructor() {
+        this.musicEnabled = true;
+        this.soundEnabled = true;
+        this.backgroundMusic = document.getElementById('backgroundMusic');
+        this.setupControls();
+    }
+    
+    setupControls() {
+        const musicToggle = document.getElementById('musicToggle');
+        const soundToggle = document.getElementById('soundToggle');
+        
+        if (musicToggle) {
+            musicToggle.addEventListener('click', () => this.toggleMusic());
+        }
+        
+        if (soundToggle) {
+            soundToggle.addEventListener('click', () => this.toggleSound());
+        }
+    }
+    
+    toggleMusic() {
+        this.musicEnabled = !this.musicEnabled;
+        const musicToggle = document.getElementById('musicToggle');
+        
+        if (this.musicEnabled) {
+            this.playBackgroundMusic();
+            musicToggle.classList.remove('muted');
+            musicToggle.textContent = '🎵';
+        } else {
+            if (this.backgroundMusic) this.backgroundMusic.pause();
+            musicToggle.classList.add('muted');
+            musicToggle.textContent = '🎵';
+        }
+    }
+    
+    toggleSound() {
+        this.soundEnabled = !this.soundEnabled;
+        const soundToggle = document.getElementById('soundToggle');
+        
+        if (this.soundEnabled) {
+            soundToggle.classList.remove('muted');
+            soundToggle.textContent = '🔊';
+        } else {
+            soundToggle.classList.add('muted');
+            soundToggle.textContent = '🔊';
+        }
+    }
+    
+    playBackgroundMusic() {
+        if (this.musicEnabled && this.backgroundMusic) {
+            this.backgroundMusic.volume = 0.3;
+            this.backgroundMusic.play().catch(e => console.warn('Music play failed:', e));
+        }
+    }
+    
+    stopBackgroundMusic() {
+        if (this.backgroundMusic) {
+            this.backgroundMusic.pause();
+            this.backgroundMusic.currentTime = 0;
+        }
+    }
+}
 
 document.addEventListener("keyup", e => {
   keys[e.key] = false;

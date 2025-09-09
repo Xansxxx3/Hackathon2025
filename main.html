@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Fire & Water Game</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="assets/music bg/bg-music.wav" as="audio">
+  <link rel="preload" href="assets/sound effects/Bonus_jivatma07.wav" as="audio">
+  <link rel="preload" href="assets/sound effects/GameOver_j1game.wav" as="audio">
+  <link rel="preload" href="assets/sound effects/GameOver2_evretro.wav" as="audio">
+  <link rel="preload" href="assets/sound effects/LevelComplete_jivatma07.wav" as="audio">
+  <link rel="preload" href="assets/sound effects/Woosh_lonce.wav" as="audio">
 </head>
 <body>
   <div id="game">
@@ -15,6 +21,39 @@
     <div class="liquid water"></div>
     <div class="liquid transmute"></div>
   </div>
+
+  <!-- Audio Elements -->
+  <audio id="backgroundMusic" loop>
+      <source src="assets/music bg/bg-music.wav" type="audio/mpeg">
+      <source src="assets/music bg/bg-music.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="bonusSound">
+      <source src="assets/sound effects/Bonus_jivatma07.wav" type="audio/mpeg">
+      <source src="assets/sound effects/Bonus_jivatma07.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="gameOverSound1">
+      <source src="assets/sound effects/GameOver_j1game.wav" type="audio/mpeg">
+      <source src="assets/sound effects/GameOver_j1game.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="gameOverSound2">
+      <source src="assets/sound effects/GameOver2_evretro.wav" type="audio/mpeg">
+      <source src="assets/sound effects/GameOver2_evretro.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="levelCompleteSound">
+      <source src="assets/sound effects/LevelComplete_jivatma07.wav" type="audio/mpeg">
+      <source src="assets/sound effects/LevelComplete_jivatma07.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="wooshSound">
+      <source src="assets/sound effects/Woosh_lonce.wav" type="audio/mpeg">
+      <source src="assets/sound effects/Woosh_lonce.ogg" type="audio/ogg">
+  </audio>
+  
+
 
   <script src="game.js"></script>
 </body>
