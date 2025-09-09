@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireboy & Watergirl: Elemental Escape</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="assets/sounds/jump.mp3" as="audio">
+    <link rel="preload" href="assets/sounds/gem_collect.mp3" as="audio">
+    <link rel="preload" href="assets/sounds/death.mp3" as="audio">
+    <link rel="preload" href="assets/sounds/level_complete.mp3" as="audio">
+    <link rel="preload" href="assets/music/background_music.mp3" as="audio">
+    <link rel="preload" href="assets/images/fireboy_idle.png" as="image">
+    <link rel="preload" href="assets/images/watergirl_idle.png" as="image">
+    <link rel="preload" href="assets/images/background.png" as="image">
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="ui">
+            <div class="level-info">Level 1: Temple Entrance</div>
+            <div class="gem-counter">Gems: <span id="gemCount">0/4</span></div>
+            <div class="audio-controls">
+                <button id="musicToggle" class="audio-btn">🎵</button>
+                <button id="soundToggle" class="audio-btn">🔊</button>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-section">
+                <div class="character-name fireboy-color">Fireboy:</div>
+                <div>Arrow Keys to move, Up to jump</div>
+            </div>
+            <div class="control-section">
+                <div class="character-name watergirl-color">Watergirl:</div>
+                <div>WASD to move, W to jump</div>
+            </div>
+            <div class="objective">Collect all gems and reach the exits!</div>
+        </div>
+        
+        <div class="victory" id="victoryScreen">
+            <div class="victory-content">
+                <h2 class="victory-title">🎉 Level Complete! 🎉</h2>
+                <p class="victory-text">Both characters escaped safely!</p>
+                <div class="victory-stats">
+                    <div>Gems Collected: <span id="finalGemCount">4/4</span></div>
+                    <div>Time: <span id="completionTime">0:00</span></div>
+                </div>
+                <button id="restartBtn" class="victory-btn">Play Again</button>
+                <button id="nextLevelBtn" class="victory-btn">Next Level</button>
+            </div>
+        </div>
+        
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-content">
+                <h2>Loading Fireboy & Watergirl</h2>
+                <div class="loading-bar">
+                    <div class="loading-progress" id="loadingProgress"></div>
+                </div>
+                <p id="loadingText">Loading assets...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="backgroundMusic" loop>
+        <source src="assets/music/background_music.mp3" type="audio/mpeg">
+        <source src="assets/music/background_music.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="jumpSound">
+        <source src="assets/sounds/jump.mp3" type="audio/mpeg">
+        <source src="assets/sounds/jump.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="gemCollectSound">
+        <source src="assets/sounds/gem_collect.mp3" type="audio/mpeg">
+        <source src="assets/sounds/gem_collect.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="deathSound">
+        <source src="assets/sounds/death.mp3" type="audio/mpeg">
+        <source src="assets/sounds/death.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="levelCompleteSound">
+        <source src="assets/sounds/level_complete.mp3" type="audio/mpeg">
+        <source src="assets/sounds/level_complete.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="fireHazardSound">
+        <source src="assets/sounds/fire_loop.mp3" type="audio/mpeg">
+        <source src="assets/sounds/fire_loop.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="waterHazardSound">
+        <source src="assets/sounds/water_loop.mp3" type="audio/mpeg">
+        <source src="assets/sounds/water_loop.ogg" type="audio/ogg">
+    </audio>
+
+    <script src="game.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fireboy & Watergirl: Elemental Escape</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preload" href="assets/sounds/jump.mp3" as="audio">
+    <link rel="preload" href="assets/sounds/gem_collect.mp3" as="audio">
+    <link rel="preload" href="assets/sounds/death.mp3" as="audio">
+    <link rel="preload" href="assets/sounds/level_complete.mp3" as="audio">
+    <link rel="preload" href="assets/music/background_music.mp3" as="audio">
+    <link rel="preload" href="assets/images/fireboy_idle.png" as="image">
+    <link rel="preload" href="assets/images/watergirl_idle.png" as="image">
+    <link rel="preload" href="assets/images/background.png" as="image">
+</head>
+<body>
+    <div class="game-container">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        
+        <div class="ui">
+            <div class="level-info">Level 1: Temple Entrance</div>
+            <div class="gem-counter">Gems: <span id="gemCount">0/4</span></div>
+            <div class="audio-controls">
+                <button id="musicToggle" class="audio-btn">🎵</button>
+                <button id="soundToggle" class="audio-btn">🔊</button>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-section">
+                <div class="character-name fireboy-color">Fireboy:</div>
+                <div>Arrow Keys to move, Up to jump</div>
+            </div>
+            <div class="control-section">
+                <div class="character-name watergirl-color">Watergirl:</div>
+                <div>WASD to move, W to jump</div>
+            </div>
+            <div class="objective">Collect all gems and reach the exits!</div>
+        </div>
+        
+        <div class="victory" id="victoryScreen">
+            <div class="victory-content">
+                <h2 class="victory-title">🎉 Level Complete! 🎉</h2>
+                <p class="victory-text">Both characters escaped safely!</p>
+                <div class="victory-stats">
+                    <div>Gems Collected: <span id="finalGemCount">4/4</span></div>
+                    <div>Time: <span id="completionTime">0:00</span></div>
+                </div>
+                <button id="restartBtn" class="victory-btn">Play Again</button>
+                <button id="nextLevelBtn" class="victory-btn">Next Level</button>
+            </div>
+        </div>
+        
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-content">
+                <h2>Loading Fireboy & Watergirl</h2>
+                <div class="loading-bar">
+                    <div class="loading-progress" id="loadingProgress"></div>
+                </div>
+                <p id="loadingText">Loading assets...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="backgroundMusic" loop>
+        <source src="assets/music/background_music.mp3" type="audio/mpeg">
+        <source src="assets/music/background_music.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="jumpSound">
+        <source src="assets/sounds/jump.mp3" type="audio/mpeg">
+        <source src="assets/sounds/jump.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="gemCollectSound">
+        <source src="assets/sounds/gem_collect.mp3" type="audio/mpeg">
+        <source src="assets/sounds/gem_collect.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="deathSound">
+        <source src="assets/sounds/death.mp3" type="audio/mpeg">
+        <source src="assets/sounds/death.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="levelCompleteSound">
+        <source src="assets/sounds/level_complete.mp3" type="audio/mpeg">
+        <source src="assets/sounds/level_complete.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="fireHazardSound">
+        <source src="assets/sounds/fire_loop.mp3" type="audio/mpeg">
+        <source src="assets/sounds/fire_loop.ogg" type="audio/ogg">
+    </audio>
+    
+    <audio id="waterHazardSound">
+        <source src="assets/sounds/water_loop.mp3" type="audio/mpeg">
+        <source src="assets/sounds/water_loop.ogg" type="audio/ogg">
+    </audio>
+
+    <script src="game.js"></script>
+</body>
+</html>
