@@ -3,6 +3,12 @@ console.log("Game loaded!");
 const char1 = document.getElementById("char1"); // Fire
 const char2 = document.getElementById("char2"); // Water
 
+const fireDoor = document.querySelector(".fire-door");
+const waterDoor = document.querySelector(".water-door");
+
+let char1InDoor = false;
+let char2InDoor = false;
+
 const keys = {};
 
 const gravity = 0.5;
@@ -169,6 +175,51 @@ function checkLiquidCollisions() {
   }
 }
 
+function isTouchingDoor(character, door) {
+  const cRect = character.getBoundingClientRect();
+  const dRect = door.getBoundingClientRect();
+
+  return !(
+    cRect.top > dRect.bottom ||
+    cRect.bottom < dRect.top ||
+    cRect.right < dRect.left ||
+    cRect.left > dRect.right
+  );
+}
+
+// Track door state
+let char1AtDoor = false;
+let char2AtDoor = false;
+let winTimeout = null;
+
+function checkDoors() {
+  // Only check if doors exist
+  if (!fireDoor || !waterDoor) return;
+
+  const char1AtFire = isTouchingDoor(char1, fireDoor);
+  const char1AtWater = isTouchingDoor(char1, waterDoor);
+  const char2AtFire = isTouchingDoor(char2, fireDoor);
+  const char2AtWater = isTouchingDoor(char2, waterDoor);
+
+  const bothAtDoors =
+    (char1AtFire && char2AtWater) ||
+    (char1AtWater && char2AtFire);
+
+  if (bothAtDoors) {
+    if (!winTimeout) {
+      console.log("Both characters are at different doors... opening in 1s");
+      winTimeout = setTimeout(() => {
+        alert("🎉 You Win! Both characters reached the doors!");
+        winTimeout = null;
+      }, 1000);
+    }
+  } else {
+    if (winTimeout) {
+      clearTimeout(winTimeout);
+      winTimeout = null;
+    }
+  }
+}
 
 // Reset both players
 function resetGame() {
@@ -203,7 +254,11 @@ function gameLoop() {
 
   checkLiquidCollisions();
 
+    checkDoors(); 
+
   requestAnimationFrame(gameLoop);
 }
+
+
 
 gameLoop();

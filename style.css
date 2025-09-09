@@ -17,6 +17,7 @@ body {
   overflow: hidden;
 }
 
+/* Characters */
 .character {
   position: absolute;
   width: 40px;
@@ -26,7 +27,7 @@ body {
 
 #char1 {
   background: red;
-  left: 100px;
+  left: 120px;
 }
 
 #char2 {
@@ -34,7 +35,6 @@ body {
   left: 200px;
 }
 
-/* highlight the active character */
 .active {
   outline: 3px solid yellow;
 }
@@ -47,17 +47,30 @@ body {
   bottom: 0;
 }
 
-.lava {
-  left: 20%;
-  background: orange;
-}
-
 .water {
-  left: 50%;
+  left: 30%;
   background: lightblue;
 }
 
 .transmute {
-  left: 75%;
+  left: 60%;
   background: green;
+}
+
+/* Doors */
+.door {
+  position: absolute;
+  width: 60px;
+  height: 80px;
+  bottom: 0;
+}
+
+.fire-door {
+  right: 10%;
+  background: darkred;
+}
+
+.water-door {
+  right: 5%;
+  background: darkblue;
 }
