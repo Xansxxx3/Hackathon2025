@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Fire & Water Game - Main Menu</title>
-  <link rel="stylesheet" href="menu/menu.css">
+  <link rel="stylesheet" href="menu.css">
 </head>
 <body>
   <div class="menu-container">
@@ -16,7 +16,6 @@
       <div class="main-menu">
         <div class="menu-actions">
           <button id="playBtn" class="menu-btn primary">Play</button>
-          <button id="instructions" class="menu-btn secondary">Instructions</button>
         </div>
       </div>
 
@@ -50,11 +49,9 @@
           <button id="backToMenu" class="menu-btn secondary">Back to Menu</button>
         </div>
       </div>
-    </div>
 
-    <div class="instructions-modal" id="instructionsModal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
+      <!-- Instructions below the main menu -->
+      <div id="instructionsContainer" class="hidden">
         <h3>How to Play</h3>
         <div class="instructions-content">
           <div class="player-instructions">
@@ -84,9 +81,10 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
-  <script src="menu/menu.js"></script>
+  <script src="menu.js"></script>
 </body>
 </html>

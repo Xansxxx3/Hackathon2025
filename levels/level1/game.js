@@ -121,7 +121,7 @@ window.addEventListener("load", () => {
 
   const keys = {};
   const gravity = 0.5;
-  const jumpStrength = -10;
+  const jumpStrength = -15;
 
   const game = document.getElementById("game");
   const gameWidth = game.clientWidth;
@@ -340,7 +340,7 @@ window.addEventListener("load", () => {
           
           // Return to menu after a delay
           setTimeout(() => {
-            window.location.href = "../../menu/index.html";
+            window.location.href = "../../index.html";
           }, 2000);
           
           winTimeout = null;

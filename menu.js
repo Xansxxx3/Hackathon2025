@@ -14,7 +14,6 @@ class GameMenu {
   initializeEventListeners() {
     // Main menu buttons
     document.getElementById('playBtn').addEventListener('click', () => this.showLevelSelection());
-    document.getElementById('instructions').addEventListener('click', () => this.showModal('instructionsModal'));
     
     // Level selection
     const levelCards = document.querySelectorAll('.level-card');
@@ -101,7 +100,7 @@ class GameMenu {
     this.saveSettings();
 
     // Navigate to selected level
-    const levelPath = `../levels/level${this.selectedLevel}/main.html`;
+    const levelPath = `../Hackathon2025/levels/level${this.selectedLevel}/main.html`;
     window.location.href = levelPath;
   }
 
