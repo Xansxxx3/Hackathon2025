@@ -1,0 +1,133 @@
+  /* style.css */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #222;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  #game {
+    position: relative;
+    width: 80%;
+    height: 70%;
+    background: #444;
+    border: 3px solid #fff;
+    overflow: hidden;
+  }
+
+  /* Characters */
+  .character {
+    position: absolute;
+    width: 40px;
+    height: 60px;
+    /* Removed bottom: 0; - let JS handle positioning */
+  }
+
+  #char1 {
+    background: red;
+    /* Removed left positioning - let JS handle it */
+  }
+
+  #char2 {
+    background: blue;
+    /* Removed left positioning - let JS handle it */
+  }
+
+  .active {
+    outline: 3px solid yellow;
+  }
+
+  /* Liquid zones */
+  .liquid {
+    position: absolute;
+    width: 20%;
+    height: 40px;
+    bottom: 0;
+  }
+
+  .lava {
+    left: 10%;
+    background: orange;
+  }
+
+  .water {
+    left: 30%;
+    background: lightblue;
+  }
+
+  .transmute {
+    left: 60%;
+    background: green;
+  }
+
+  /* Doors */
+  .door {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    bottom: 0;
+  }
+
+  .fire-door {
+    right: 10%;
+    background: darkred;
+  }
+
+  .water-door {
+    right: 5%;
+    background: darkblue;
+  }
+
+  /* Audio Controls */
+  .audio-controls {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .audio-btn {
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .audio-btn.muted {
+    background: rgba(255, 255, 255, 0.3);
+    text-decoration: line-through;
+  }
+
+  /* Instructions */
+  .instructions {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  .level-info {
+    font-weight: bold;
+    color: #4ecdc4;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+
+  /* Platform */
+  .platform {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 32px;
+    z-index: 1;
+  }

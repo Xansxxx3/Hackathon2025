@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fire & Water Game</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="../../assets/music bg/bg-music.wav" as="audio">
+  <link rel="preload" href="../../assets/sound effects/Bonus_jivatma07.wav" as="audio">
+  <link rel="preload" href="../../assets/sound effects/GameOver_j1game.wav" as="audio">
+  <link rel="preload" href="../../assets/sound effects/GameOver2_evretro.wav" as="audio">
+  <link rel="preload" href="../../assets/sound effects/LevelComplete_jivatma07.wav" as="audio">
+  <link rel="preload" href="../../assets/sound effects/Woosh_lonce.wav" as="audio">
+  <link rel="preload" href="../../assets/sound effects/Jump__akelley6.wav" as="audio">
+</head>
+<body>
+  <div id="game">
+    
+    <!-- Audio Controls -->
+    <div class="audio-controls">
+      <button id="musicToggle" class="audio-btn">🎵</button>
+      <button id="soundToggle" class="audio-btn">🔊</button>
+    </div>
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <div class="level-info">Level 1: Tutorial</div>
+      Player 1 (Red): A/D to move, W to jump, F for ability<br>
+      Player 2 (Blue): Arrow keys to move, Up to jump, G for ability<br>
+      Press R to reset | Press M for menu
+    </div>
+
+    <!-- Characters -->
+   <div id="char1" class="character"></div>
+   <div id="char2" class="character"></div>
+
+    <!-- Hazard Zones -->
+    <!-- <div class="liquid lava"></div> -->
+    <div class="liquid water"></div>
+    <div class="liquid transmute"></div>
+
+    <!-- Winning doors -->
+    <div class="door fire-door"></div>
+    <div class="door water-door"></div>
+
+    <!-- Platform -->
+    <div id="platform" class="platform"></div>
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="backgroundMusic" loop>
+      <source src="../../assets/music bg/bg-music.wav" type="audio/mpeg">
+      <source src="../../assets/music bg/bg-music.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="bonusSound">
+      <source src="../../assets/sound effects/Bonus_jivatma07.wav" type="audio/mpeg">
+      <source src="../../assets/sound effects/Bonus_jivatma07.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="gameOverSound1">
+      <source src="../../assets/sound effects/GameOver_j1game.wav" type="audio/mpeg">
+      <source src="../../assets/sound effects/GameOver_j1game.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="gameOverSound2">
+      <source src="../../assets/sound effects/GameOver2_evretro.wav" type="audio/mpeg">
+      <source src="../../assets/sound effects/GameOver2_evretro.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="levelCompleteSound">
+      <source src="../../assets/sound effects/LevelComplete_jivatma07.wav" type="audio/mpeg">
+      <source src="../../assets/sound effects/LevelComplete_jivatma07.ogg" type="audio/ogg">
+  </audio>
+
+  <audio id="wooshSound">
+      <source src="../../assets/sound effects/Woosh_lonce.wav" type="audio/mpeg">
+      <source src="../../assets/sound effects/Woosh_lonce.ogg" type="audio/ogg">
+  </audio>
+  
+  <audio id="jumpSound">
+      <source src="../../assets/sound effects/Jump__akelley6.wav" type="audio/mpeg">
+      <source src="../../assets/sound effects/Jump__akelley6.ogg" type="audio/ogg">
+  </audio>
+  
+
+
+  <script src="game.js"></script>
+</body>
+</html>
